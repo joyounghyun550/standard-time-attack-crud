@@ -33,7 +33,7 @@ function App() {
     } else if (e.nativeEvent.submitter.name === "update-btn") {
       const updateCountry = countries.map((item) =>
         item.name === name
-          ? { name: name, gold: gold, silver: silver, bronze: bronze }
+          ? { ...item, gold: +gold, silver: +silver, bronze: +bronze }
           : item
       );
       setCountries(updateCountry);
@@ -41,10 +41,16 @@ function App() {
     resetForm();
   };
 
-  const sortGold = () => {
-    return countries.sort((a, b) => {
-      parseInt(b.gold) - parseInt(a.gold);
-    });
+  const handleDelete = (name) => {
+    const updatedCountry = countries.filter((item) => item.name !== name);
+    setCountries(updatedCountry);
+  };
+
+  const getsortCountry = () => {
+    const sortedCountry = countries.sort(
+      (a, b) => parseInt(b.gold) - parseInt(a.gold)
+    );
+    return sortedCountry;
   };
 
   return (
@@ -91,10 +97,14 @@ function App() {
         </button>
       </form>
       <ul>
-        {sortGold().map((item) => {
+        {getsortCountry().map((item) => {
           return (
             <li key={item.name}>
-              {item.name} {item.gold} {item.silver} {item.bronze}
+              <span>{item.name}</span>
+              <span>{item.gold}</span>
+              <span>{item.silver}</span>
+              <span>{item.bronze}</span>
+              <button onClick={() => handleDelete(item.name)}>삭제</button>
             </li>
           );
         })}
